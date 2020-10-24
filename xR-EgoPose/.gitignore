@@ -1,0 +1,24 @@
+# Copyright (c) Facebook, Inc. and its affiliates. All Rights Reserved
+# Byte-compiled
+__pycache__/
+
+# Distribution / packaging
+.Python
+build/
+develop-eggs/
+dist/
+downloads/
+.installed.cfg
+MANIFEST
+
+# Datasets
+data/Dataset/
+
+# Sphinx documentation
+docs/_build/
+
+# pyenv
+.python-version
+
+# VSCode project settings
+.vscode/
