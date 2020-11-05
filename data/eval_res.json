@@ -1,0 +1,20 @@
+{
+  "FullBody": {
+    "All": 1.5133436918258667,
+    "LowerStretching": 1.439475417137146,
+    "UpperStretching": 1.5398118495941162,
+    "Walking": 1.4907302856445312
+  },
+  "UpperBody": {
+    "All": 1.6606054306030273,
+    "LowerStretching": 1.6444541215896606,
+    "UpperStretching": 1.6713067293167114,
+    "Walking": 1.6303426027297974
+  },
+  "LowerBody": {
+    "All": 1.6606054306030273,
+    "LowerStretching": 1.6444541215896606,
+    "UpperStretching": 1.6713067293167114,
+    "Walking": 1.6303426027297974
+  }
+}
