@@ -10,7 +10,7 @@ transforms:
   norm: Neck
 
 data_loader:
-  batch_size: 16
+  batch_size: 1
   shuffle: True
 
 eval:

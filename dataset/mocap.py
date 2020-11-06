@@ -96,6 +96,10 @@ class Mocap(BaseDataset):
 
         for jid, j in enumerate(config.skel.keys()):
             p2d[jid] = p2d_orig[joint_names[j]]
+            #################### Fisheye Camera라서 중간에 렌즈부분 맞춰서 Crop
+            # p2d[jid][0] -= (250+16)
+            # p2d[jid][1] -= (0+16)
+
             p3d[jid] = p3d_orig[joint_names[j]]
 
         p3d /= self.CM_TO_M
@@ -107,16 +111,25 @@ class Mocap(BaseDataset):
         # load image
         img_path = self.index['rgba'][index].decode('utf8')
         #################### DATASET PATH 수정해줘야함. H5 파일에 고정된 DIRECTORY로 저장되어 있는 것 같은데, 나는 고정된 DIRECTORY를 사용할 수가 없어서
-        img_path = "/SSD/xR-EgoPose/" + img_path
+        # img_path = "/SSD/xR-EgoPose/" + img_path
         img = sio.imread(img_path).astype(np.float32)
         img /= 255.0
 
         # read joint positions
         json_path = self.index['json'][index].decode('utf8')
         #################### DATASET PATH 수정해줘야함. H5 파일에 고정된 DIRECTORY로 저장되어 있는 것 같은데, 나는 고정된 DIRECTORY를 사용할 수가 없어서
-        json_path = "/SSD/xR-EgoPose/" + json_path
+        # json_path = "/SSD/xR-EgoPose/" + json_path
         data = io.read_json(json_path)
         p2d, p3d = self._process_points(data)
+
+        #################### 2D Image에 Labeled Keypoint 찍어보기 위한 Test Code
+        # img *= 255.0
+        # for (x, y) in p2d:
+        #     for i in range(int(x-10), int(x+10)):
+        #         for j in range(int(y-10), int(y+10)):
+        #             img[j, i, :] = 255
+        # sio.imsave("./test.png", img)
+        # exit()
 
         # get action name
         action = data['action']
@@ -125,8 +138,27 @@ class Mocap(BaseDataset):
             img = self.transform({'image': img})['image']
             p3d = self.transform({'joints3D': p3d})['joints3D']
             p2d = self.transform({'joints2D': p2d})['joints2D']
+        
+        #################### Keypoint 논문에 정의된 15개로 압축하고 p2d에서 manual하게 넣어준 후에 Heatmap 생성
+        # keypoints = np.zeros((15, 2))
+        # keypoints[0] = p2d[4]  # Neck
+        # keypoints[1] = 
+        # keypoints[2] = 
+        # keypoints[3] = 
+        # keypoints[4] = 
+        # keypoints[5] = 
+        # keypoints[6] = 
+        # keypoints[7] = 
+        # keypoints[8] = 
+        # keypoints[9] = 
+        # keypoints[10] = 
+        # keypoints[11] = 
+        # keypoints[12] = 
+        # keypoints[13] = 
+        # keypoints[14] = 
+        # heatmaps = self.generateHeatmap(keypoints)
 
-        return img, p2d, p3d, action
+        return img, p2d, p3d, action, # heatmaps.astype(np.float32)
 
     def __len__(self):
 

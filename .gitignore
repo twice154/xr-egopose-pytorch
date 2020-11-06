@@ -22,3 +22,6 @@ docs/_build/
 
 # VSCode project settings
 .vscode/
+
+exp/
+weight/

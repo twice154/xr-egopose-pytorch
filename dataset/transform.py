@@ -36,6 +36,8 @@ class ImageTrsf(BaseTransform):
 
         # channel last to channel first
         img = np.transpose(img, [2, 0, 1])
+        #################### Fisheye Camera라서 중간에 렌즈부분 맞춰서 Crop
+        # img = img[:, 0+16:800-16, 250+16:1050-16]
 
         # normalization
         img -= self.mean
