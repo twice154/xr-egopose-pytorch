@@ -22,24 +22,24 @@ def set_skeleton():
         'Spine': {'parent': 'Hips', 'col': 0},
         'Spine1': {'parent': 'Spine', 'col': 0},
         'Spine2': {'parent': 'Spine1', 'col': 0},
-        'Neck': {'parent': 'Spine2', 'col': 5},
-        'Head': {'parent': 'Neck', 'col': 5},
+        'Neck': {'parent': 'Spine2', 'col': 5},  # Neck 4
+        'Head': {'parent': 'Neck', 'col': 5},  # Head 5
         'LeftShoulder': {'parent': 'Spine2', 'col': 0},
-        'LeftArm': {'parent': 'LeftShoulder', 'col': 3},
-        'LeftForeArm': {'parent': 'LeftArm', 'col': 3},
-        'LeftHand': {'parent': 'LeftForeArm', 'col': 4},
+        'LeftArm': {'parent': 'LeftShoulder', 'col': 3},  # Left Arm 7
+        'LeftForeArm': {'parent': 'LeftArm', 'col': 3},  # Left Elbow 8
+        'LeftHand': {'parent': 'LeftForeArm', 'col': 4},  # Left Hand 9
         'RightShoulder': {'parent': 'Spine2', 'col': 0},
-        'RightArm':  {'parent': 'RightShoulder', 'col': 1},
-        'RightForeArm':  {'parent': 'RightArm', 'col': 1},
-        'RightHand':  {'parent': 'RightForeArm', 'col': 2},
-        'LeftUpLeg': {'parent': 'Hips', 'col': 8},
-        'LeftLeg': {'parent': 'LeftUpLeg', 'col': 8},
-        'LeftFoot': {'parent': 'LeftLeg', 'col': 9},
-        'LeftToeBase': {'parent': 'LeftFoot', 'col': 9},
-        'RightUpLeg': {'parent': 'Hips', 'col': 6},
-        'RightLeg': {'parent': 'RightUpLeg', 'col': 6},
-        'RightFoot': {'parent': 'RightLeg', 'col': 7},
-        'RightToeBase': {'parent': 'RightFoot', 'col': 7},
+        'RightArm':  {'parent': 'RightShoulder', 'col': 1},  # Right Arm 11
+        'RightForeArm':  {'parent': 'RightArm', 'col': 1},  # Right Elbow 12
+        'RightHand':  {'parent': 'RightForeArm', 'col': 2},  # Right Hand 13
+        'LeftUpLeg': {'parent': 'Hips', 'col': 8},  # Left Leg 14
+        'LeftLeg': {'parent': 'LeftUpLeg', 'col': 8},  # Left Knee 15
+        'LeftFoot': {'parent': 'LeftLeg', 'col': 9},  # Left Foot 16
+        'LeftToeBase': {'parent': 'LeftFoot', 'col': 9},  # Left Toe 17
+        'RightUpLeg': {'parent': 'Hips', 'col': 6},  # Right Leg 18
+        'RightLeg': {'parent': 'RightUpLeg', 'col': 6},  # Right Knee 19
+        'RightFoot': {'parent': 'RightLeg', 'col': 7},  # Right Foot 20
+        'RightToeBase': {'parent': 'RightFoot', 'col': 7},  # Right Toe 21
     }
 
     for jid, v in enumerate(joints.values()):

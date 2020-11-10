@@ -42,6 +42,8 @@ def compute_error(pred, gt):
 class EvalBody(BaseEval):
     """Eval entire body"""
 
+    _SEL = [4, 5, 7, 8, 9, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21]
+
     def eval(self, pred, gt, actions=None):
         """Evaluate
 
@@ -54,7 +56,7 @@ class EvalBody(BaseEval):
         """
 
         for pid, (pose_in, pose_target) in enumerate(zip(pred, gt)):
-            err = compute_error(pose_in, pose_target)
+            err = compute_error(pose_in[self._SEL], pose_target[self._SEL])
 
             if actions:
                 act_name = self._map_action_name(actions[pid])
@@ -75,7 +77,7 @@ class EvalBody(BaseEval):
 class EvalUpperBody(BaseEval):
     """Eval upper body"""
 
-    _SEL = [4, 5, 6, 7, 8, 9, 10, 11]
+    _SEL = [4, 5, 7, 8, 9, 11, 12, 13]  # [4, 5, 6, 7, 8, 9, 10, 11]
 
     def eval(self, pred, gt, actions=None):
         """Evaluate
@@ -110,7 +112,7 @@ class EvalUpperBody(BaseEval):
 class EvalLowerBody(BaseEval):
     """Eval lower body"""
 
-    _SEL = [0, 1, 2, 3, 12, 13, 14, 15]
+    _SEL = [14, 15, 16, 17, 18, 19, 20, 21]  # [0, 1, 2, 3, 12, 13, 14, 15]
 
     def eval(self, pred, gt, actions=None):
         """Evaluate

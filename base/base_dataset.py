@@ -29,7 +29,7 @@ class GenerateHeatmap():
     def __init__(self, output_res, num_parts):
         self.output_res = output_res
         self.num_parts = num_parts
-        sigma = self.output_res/64
+        sigma = (self.output_res-400)/64
         self.sigma = sigma
         size = 6*sigma + 3
         x = np.arange(0, size, 1, float)
@@ -43,6 +43,8 @@ class GenerateHeatmap():
 
         # for p in keypoints:
         for idx, pt in enumerate(keypoints):
+            pt /= 16
+            pt += 200
             if pt[0] > 0: 
                 x, y = int(pt[0]), int(pt[1])
                 if x<0 or y<0 or x>=self.output_res or y>=self.output_res:
@@ -56,6 +58,7 @@ class GenerateHeatmap():
                 cc,dd = max(0, ul[0]), min(br[0], self.output_res)
                 aa,bb = max(0, ul[1]), min(br[1], self.output_res)
                 hms[idx, aa:bb,cc:dd] = np.maximum(hms[idx, aa:bb,cc:dd], self.g[a:b,c:d])
+        hms = hms[:, 0+200:48+200, 0+200:48+200]
         return hms
 
 
@@ -98,7 +101,8 @@ class BaseDataset(Dataset):
         self.transform = transform
 
         #################### Image Size와 # of Keypoints 수동으로 그냥 설정해줌
-        # self.generateHeatmap = GenerateHeatmap(400, 15)
+        self.generateHeatmap = GenerateHeatmap(48+400, 15)  # Out of Range도 커버하기 위해서 상하좌우 200씩 크게 잡아서 만든 후에, Crop하는 방식으로 접근함.
+        ####################
 
     def _load_index(self):
         """Get indexed set. If the set has already been

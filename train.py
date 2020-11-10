@@ -47,19 +47,20 @@ def main():
     eval_lower = evaluate.EvalUpperBody()
 
     # ------------------- Read dataset frames -------------------
-    for it, (img, p2d, p3d, action) in enumerate(data_loader):
+    for it, (img, p2d, p3d, action, heatmap) in enumerate(data_loader):
         #################### p2d는 각 Joint별 (x,y) 좌표를 나타낸듯. Image의 좌측상단이 (0,0)이다.
         #################### p3d는 Neck의 좌표를 (0,0,0)으로 생각했을 때의 각 Joint별 (^x,^y,^z) 좌표를 나타낸듯.
         #################### Joint 순서는 config.py에 있다.
         #################### 정확한 것은 나중에 Visualize 해야 확실하게 판단할 수 있을듯.
 
         LOGGER.info('Iteration: {}'.format(it))
-        LOGGER.info('Images: {}'.format(img.shape))
-        LOGGER.info('p2dShapes: {}'.format(p2d.shape))
+        LOGGER.info('Images: {}'.format(img.shape))  # (Batch, Channel, Height(y), Width(x))
+        LOGGER.info('p2dShapes: {}'.format(p2d.shape))  # (Width, Height)
         LOGGER.info('p2ds: {}'.format(p2d))
-        LOGGER.info('p3dShapes: {}'.format(p3d.shape))
+        LOGGER.info('p3dShapes: {}'.format(p3d.shape))  # (^x, ^y, ^z)
         LOGGER.info('p3ds: {}'.format(p3d))
         LOGGER.info('Actions: {}'.format(action))
+        LOGGER.info('heatmapShapes: {}'.format(heatmap.shape))
 
         # -----------------------------------------------------------
         # ------------------- Run your model here -------------------
