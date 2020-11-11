@@ -16,6 +16,7 @@ from utils import config, ConsoleLogger
 from utils import evaluate, io
 
 import torch.nn as nn
+import torch.optim as optim
 
 from models import resnet18
 from models import resnet34
@@ -45,20 +46,20 @@ def main():
 
     # ------------------- Data loader -------------------
 
-    data_transform = transforms.Compose([
+    train_data_transform = transforms.Compose([
         trsf.ImageTrsf(),
         trsf.Joints3DTrsf(),
         trsf.ToTensor()])
 
     # let's load data from validation set as example
-    data = Mocap(
+    train_data = Mocap(
         config.dataset.train,
         SetType.TRAIN,
-        transform=data_transform)
-    data_loader = DataLoader(
-        data,
-        batch_size=config.data_loader.batch_size,
-        shuffle=config.data_loader.shuffle)
+        transform=train_data_transform)
+    train_data_loader = DataLoader(
+        train_data,
+        batch_size=config.train_data_loader.batch_size,
+        shuffle=config.train_data_loader.shuffle)
     
     # ------------------- Build Model -------------------
 
@@ -75,10 +76,10 @@ def main():
         encoder = nn.DataParallel(encoder)
         decoder = nn.DataParallel(decoder)
         reconstructer = nn.DataParallel(reconstructer)
-    backbone.to(device)
-    encoder.to(device)
-    decoder.to(device)
-    reconstructer.to(device)
+    backbone = backbone.cuda()
+    encoder = encoder.cuda()
+    decoder = decoder.cuda()
+    reconstructer = reconstructer.cuda()
     
     # ------------------- Build Loss & Optimizer -------------------
 
@@ -89,57 +90,63 @@ def main():
     heatmap_reconstruction_loss_func = nn.MSELoss()
 
     # Build Optimizer
-
-    # ------------------- Evaluation -------------------
-
-    eval_body = evaluate.EvalBody()
-    eval_upper = evaluate.EvalUpperBody()
-    eval_lower = evaluate.EvalUpperBody()
+    optimizer = optim.Adam([
+        {"params": backbone.parameters()},
+        {"params": encoder.parameters()},
+        {"params": decoder.parameters()},
+        {"params": reconstructer.parameters()}
+    ], lr=0.001)
 
     # ------------------- Read dataset frames -------------------
-    for it, (img, p2d, p3d, action, heatmap) in enumerate(data_loader):
-        #################### p2d는 각 Joint별 (x,y) 좌표를 나타낸듯. Image의 좌측상단이 (0,0)이다.
-        #################### p3d는 Neck의 좌표를 (0,0,0)으로 생각했을 때의 각 Joint별 (^x,^y,^z) 좌표를 나타낸듯.
-        #################### Joint 순서는 config.py에 있다.
+    for ep in range(config.train_setting.epoch):
+        for it, (img, p2d, p3d, action, heatmap) in enumerate(train_data_loader):
+            #################### p2d는 각 Joint별 (x,y) 좌표를 나타낸듯. Image의 좌측상단이 (0,0)이다.
+            #################### p3d는 Neck의 좌표를 (0,0,0)으로 생각했을 때의 각 Joint별 (^x,^y,^z) 좌표를 나타낸듯.
+            #################### Joint 순서는 config.py에 있다.
 
-        LOGGER.info('Iteration: {}'.format(it))
-        LOGGER.info('Images: {}'.format(img.shape))  # (Batch, Channel, Height(y), Width(x))
-        LOGGER.info('p2dShapes: {}'.format(p2d.shape))  # (Width, Height)
-        # LOGGER.info('p2ds: {}'.format(p2d))
-        LOGGER.info('p3dShapes: {}'.format(p3d.shape))  # (^x, ^y, ^z)
-        # LOGGER.info('p3ds: {}'.format(p3d))
-        LOGGER.info('Actions: {}'.format(action))
-        LOGGER.info('heatmapShapes: {}'.format(heatmap.shape))
+            LOGGER.info('Iteration: {}'.format(it))
+            LOGGER.info('Images: {}'.format(img.shape))  # (Batch, Channel, Height(y), Width(x))
+            LOGGER.info('p2dShapes: {}'.format(p2d.shape))  # (Width, Height)
+            # LOGGER.info('p2ds: {}'.format(p2d))
+            LOGGER.info('p3dShapes: {}'.format(p3d.shape))  # (^x, ^y, ^z)
+            # LOGGER.info('p3ds: {}'.format(p3d))
+            LOGGER.info('Actions: {}'.format(action))
+            LOGGER.info('heatmapShapes: {}'.format(heatmap.shape))
 
-        # -----------------------------------------------------------
-        # ------------------- Run your model here -------------------
-        # -----------------------------------------------------------
+            # -----------------------------------------------------------
+            # ------------------- Run your model here -------------------
+            # -----------------------------------------------------------
 
-        # Move Tensors to GPUs
-        img.to(device)
-        p3d.to(device)
-        heatmap.to(device)
+            optimizer.zero_grad()
 
-        # Forward
-        predicted_heatmap = backbone(img)
-        latent = encoder(predicted_heatmap)
-        predicted_pose = decoder(latent)
-        reconstructed_heatmap = reconstructer(latent)
+            # Move Tensors to GPUs
+            img = img.cuda()
+            p3d = p3d.cuda()
+            heatmap = heatmap.cuda()
 
-        # Loss Calculation
-        heatmap_prediction_loss = heatmap_prediction_loss_func(predicted_heatmap, heatmap)
-        torch.reshape(predicted_pose, (16, 3))
-        p3d_for_loss = p3d[4, 5, 7, 8, 9, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21]  # 13까지가 Upper Body
-        pose_prediction_cosine_similarity_loss = pose_prediction_cosine_similarity_loss_func(predicted_pose, p3d_for_loss)
-        pose_prediction_l1_loss = pose_prediction_l1_loss_func(predicted_pose, p3d_for_loss)
-        pose_prediction_loss = -0.01*pose_prediction_cosine_similarity_loss + 0.5*pose_prediction_l1_loss
-        heatmap_reconstruction_loss = heatmap_reconstruction_loss_func(reconstructed_heatmap, heatmap)
-        # Backpropagating Loss with Weighting Factors
-        backbone_loss = heatmap_prediction_loss
-        lifting_loss = 0.1*pose_prediction_loss + 0.001*heatmap_reconstruction_loss
-        loss = backbone_loss + lifting_loss
+            # Forward
+            predicted_heatmap = backbone(img)
+            latent = encoder(predicted_heatmap)
+            predicted_pose = decoder(latent)
+            reconstructed_heatmap = reconstructer(latent)
 
-        # Backward & Update
+            # Loss Calculation
+            heatmap_prediction_loss = heatmap_prediction_loss_func(predicted_heatmap, heatmap)
+            p3d_for_loss = torch.cat((p3d[:, 4:6, :], p3d[:, 7:10, :], p3d[:, 11:, :]), dim=1)  # 13까지가 Upper Body
+            p3d_for_loss = torch.reshape(p3d_for_loss, (-1, 48))
+            pose_prediction_cosine_similarity_loss = pose_prediction_cosine_similarity_loss_func(predicted_pose, p3d_for_loss)
+            pose_prediction_cosine_similarity_loss = torch.mean(pose_prediction_cosine_similarity_loss)
+            pose_prediction_l1_loss = pose_prediction_l1_loss_func(predicted_pose, p3d_for_loss)
+            pose_prediction_loss = -0.01*pose_prediction_cosine_similarity_loss + 0.5*pose_prediction_l1_loss
+            heatmap_reconstruction_loss = heatmap_reconstruction_loss_func(reconstructed_heatmap, heatmap)
+            # Backpropagating Loss with Weighting Factors
+            backbone_loss = heatmap_prediction_loss
+            lifting_loss = 0.1*pose_prediction_loss + 0.001*heatmap_reconstruction_loss
+            loss = backbone_loss + lifting_loss
+
+            # Backward & Update
+            loss.backward()
+            optimizer.step()
 
 
     # -----------------------------------------------------------
@@ -148,6 +155,12 @@ def main():
     # -----------------------------------------------------------
     # -----------------------------------------------------------
     LOGGER.info('Validation...')
+
+    # ------------------- Evaluation -------------------
+
+    eval_body = evaluate.EvalBody()
+    eval_upper = evaluate.EvalUpperBody()
+    eval_lower = evaluate.EvalUpperBody()
 
     # ------------------- Evaluate -------------------
 
