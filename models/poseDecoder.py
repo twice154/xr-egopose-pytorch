@@ -11,7 +11,7 @@ class PoseDecoder(nn.Module):
         self.latent = latent
 
         self.fc1 = nn.Linear(self.latent, 32)
-        self.relu = nn.ReLU(inplace=True)
+        self.lrelu = nn.LeakyReLU(0.2)
         self.fc2 = nn.Linear(32, 32)
         self.fc3 = nn.Linear(32, 48)
         self.tan = nn.Tanh()
@@ -19,9 +19,12 @@ class PoseDecoder(nn.Module):
     
     def forward(self, x):  # (20)
         x = self.fc1(x)  # (32)
-        x = self.relu(x)
+        x = self.lrelu(x)
         x = self.fc2(x)  # (32)
-        x = self.relu(x)
+        x = self.lrelu(x)
         x = self.fc3(x)  # (48)
         #################### Scaling이 -1~+1 사이로 되어있어서, Loss 계산시에 x2해서 해줘야함 (2x2x2 Cube 상에서 3DPose를 계산하기 떄문에)
-        x = self.tan(x)  
+        x = self.tan(x)
+        x = x * 2
+
+        return x

@@ -185,8 +185,8 @@ class ResNet(nn.Module):
         #################### Classification 용도로 만들어진 이 부분 2D Pose Heatmap Estimation 할 수 있도록 수정 필요함
         # self.avgpool = nn.AdaptiveAvgPool2d((1, 1))
         # self.fc = nn.Linear(512 * block.expansion, num_classes)
-        self.deconv1 = nn.ConvTranspose2d(2048, 256, kernel_size=3, stride=2, bias=False)
-        self.deconv2 = nn.ConvTranspose2d(256, 15, kernel_size=3, stride=2, bias=False)
+        self.deconv1 = nn.ConvTranspose2d(2048, 256, kernel_size=4, stride=2, bias=False, padding=1)
+        self.deconv2 = nn.ConvTranspose2d(256, 15, kernel_size=4, stride=2, bias=False, padding=1)
         self.sig = nn.Sigmoid()
         ####################
 
@@ -232,7 +232,7 @@ class ResNet(nn.Module):
 
         return nn.Sequential(*layers)
 
-    def _forward_impl(self, x: Tensor) -> Tensor:  # (3, 384, 384)
+    def _forward_impl(self, x: Tensor) -> Tensor:  # (3, 368, 368)
         # See note [TorchScript super()]
         x = self.conv1(x)
         x = self.bn1(x)
@@ -255,7 +255,6 @@ class ResNet(nn.Module):
         x = self.deconv2(x)  # (15, 48, 48)
         x = self.sig(x)
         ####################
-
 
         return x
 

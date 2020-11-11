@@ -10,10 +10,10 @@ class HeatmapEncoder(nn.Module):
         self.channel = channel
         self.latent = latent
 
-        self.conv1 = nn.Conv2d(self.channel, 64, kernel_size=3, stride=2, padding=1)
-        self.relu = nn.ReLU(inplace=True)
-        self.conv2 = nn.Conv2d(64, 128, kernel_size=3, stride=2, padding=1)
-        self.conv3 = nn.Conv2d(128, 256, kernel_size=3, stride=2, padding=1)
+        self.conv1 = nn.Conv2d(self.channel, 64, kernel_size=4, bias=False, stride=2, padding=1)
+        self.lrelu = nn.LeakyReLU(0.2)
+        self.conv2 = nn.Conv2d(64, 128, kernel_size=4, bias=False, stride=2, padding=1)
+        self.conv3 = nn.Conv2d(128, 256, kernel_size=4, bias=False, stride=2, padding=1)
 
         self.fc1 = nn.Linear(6*6*256, 2048)
         self.fc2 = nn.Linear(2048, 512)
@@ -22,15 +22,17 @@ class HeatmapEncoder(nn.Module):
     
     def forward(self, x):  # (15, 48, 48)
         x = self.conv1(x)  # (64, 24, 24)
-        x = self.relu(x)
+        x = self.lrelu(x)
         x = self.conv2(x)  # (128, 12, 12)
-        x = self.relu(x)
+        x = self.lrelu(x)
         x = self.conv3(x)  # (256, 6, 6)
-        x = self.relu(x)
+        x = self.lrelu(x)
 
-        x = torch.flatten(x, 1)  # (256 x 6 x 6) = (9216)
+        x = torch.flatten(x, 1)  # (256 x 6 x 6) = (18432 / 2) = (9216)
         x = self.fc1(x)  # (2048)
-        x = self.relu(x)
+        x = self.lrelu(x)
         x = self.fc2(x)  # (512)
-        x = self.relu(x)
+        x = self.lrelu(x)
         x = self.fc3(x)  # (20)
+
+        return x

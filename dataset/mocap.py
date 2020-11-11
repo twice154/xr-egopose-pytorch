@@ -13,6 +13,7 @@ import numpy as np
 from base import BaseDataset
 from utils import io, config
 
+from skimage import transform as stransform
 
 class Mocap(BaseDataset):
     """Mocap Dataset loader"""
@@ -97,8 +98,8 @@ class Mocap(BaseDataset):
         for jid, j in enumerate(config.skel.keys()):
             p2d[jid] = p2d_orig[joint_names[j]]
             #################### Fisheye Camera라서 중간에 렌즈부분 맞춰서 Crop
-            p2d[jid][0] -= (250+16)
-            p2d[jid][1] -= (0+16)
+            p2d[jid][0] -= (250+32)
+            p2d[jid][1] -= (0+32)
             ####################
 
             p3d[jid] = p3d_orig[joint_names[j]]
@@ -117,7 +118,10 @@ class Mocap(BaseDataset):
         img = sio.imread(img_path).astype(np.float32)
         img /= 255.0
         #################### Fisheye Camera라서 중간에 렌즈부분 맞춰서 Crop
-        img = img[0+16:800-16, 250+16:1050-16, :]  # (y, x)임
+        img = img[0+32:800-32, 250+32:1050-32, :]  # (y, x)임
+        ####################
+        #################### Input Size 맞추기 위해서 1/2 Bicubic Downsampling
+        img = stransform.downscale_local_mean(img, (2, 2, 1))
         ####################
 
         # read joint positions

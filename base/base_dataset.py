@@ -43,8 +43,9 @@ class GenerateHeatmap():  # Generate Probability Field -> 0~1
 
         # for p in keypoints:
         for idx, pt in enumerate(keypoints):
-            pt /= 16
-            pt += 200
+            pt /= 16  # Heatmap Scaling
+            pt += 200  # Heatmap Margin
+            pt = [int(pt[0]), int(pt[1])]  # Pixel Location is Integer
             if pt[0] > 0: 
                 x, y = int(pt[0]), int(pt[1])
                 if x<0 or y<0 or x>=self.output_res or y>=self.output_res:

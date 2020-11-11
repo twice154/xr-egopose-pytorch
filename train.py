@@ -35,6 +35,14 @@ def main():
 
     LOGGER.info('Starting demo...')
 
+
+    # -----------------------------------------------------------
+    # -----------------------------------------------------------
+    # --------------------- Training Phase ----------------------
+    # -----------------------------------------------------------
+    # -----------------------------------------------------------
+    LOGGER.info('Training...')
+
     # ------------------- Data loader -------------------
 
     data_transform = transforms.Compose([
@@ -61,7 +69,7 @@ def main():
 
     device = torch.device("cuda:0" if torch.cuda.is_available() else "cpu")
     if torch.cuda.device_count() > 1:
-        print("Let's use", torch.cuda.device_count(), "GPUs!")
+        LOGGER.info(("Let's use", torch.cuda.device_count(), "GPUs!"))
         # dim = 0 [30, xxx] -> [10, ...], [10, ...], [10, ...] on 3 GPUs
         backbone = nn.DataParallel(backbone)
         encoder = nn.DataParallel(encoder)
@@ -74,7 +82,13 @@ def main():
     
     # ------------------- Build Loss & Optimizer -------------------
 
-    print("TO DO")
+    # Build Loss
+    heatmap_prediction_loss_func = nn.MSELoss()
+    pose_prediction_cosine_similarity_loss_func = nn.CosineSimilarity()
+    pose_prediction_l1_loss_func = nn.L1Loss()
+    heatmap_reconstruction_loss_func = nn.MSELoss()
+
+    # Build Optimizer
 
     # ------------------- Evaluation -------------------
 
@@ -87,14 +101,13 @@ def main():
         #################### p2d는 각 Joint별 (x,y) 좌표를 나타낸듯. Image의 좌측상단이 (0,0)이다.
         #################### p3d는 Neck의 좌표를 (0,0,0)으로 생각했을 때의 각 Joint별 (^x,^y,^z) 좌표를 나타낸듯.
         #################### Joint 순서는 config.py에 있다.
-        #################### 정확한 것은 나중에 Visualize 해야 확실하게 판단할 수 있을듯.
 
         LOGGER.info('Iteration: {}'.format(it))
         LOGGER.info('Images: {}'.format(img.shape))  # (Batch, Channel, Height(y), Width(x))
         LOGGER.info('p2dShapes: {}'.format(p2d.shape))  # (Width, Height)
-        LOGGER.info('p2ds: {}'.format(p2d))
+        # LOGGER.info('p2ds: {}'.format(p2d))
         LOGGER.info('p3dShapes: {}'.format(p3d.shape))  # (^x, ^y, ^z)
-        LOGGER.info('p3ds: {}'.format(p3d))
+        # LOGGER.info('p3ds: {}'.format(p3d))
         LOGGER.info('Actions: {}'.format(action))
         LOGGER.info('heatmapShapes: {}'.format(heatmap.shape))
 
@@ -102,26 +115,60 @@ def main():
         # ------------------- Run your model here -------------------
         # -----------------------------------------------------------
 
+        # Move Tensors to GPUs
         img.to(device)
-        backbone(img)
-        print("INFERENCe")
-        exit()
+        p3d.to(device)
+        heatmap.to(device)
 
-        # ------------------- Evaluate -------------------
+        # Forward
+        predicted_heatmap = backbone(img)
+        latent = encoder(predicted_heatmap)
+        predicted_pose = decoder(latent)
+        reconstructed_heatmap = reconstructer(latent)
 
-        # TODO: replace p3d_hat with model preditions
-        p3d_hat = torch.ones_like(p3d)
+        # Loss Calculation
+        heatmap_prediction_loss = heatmap_prediction_loss_func(predicted_heatmap, heatmap)
+        torch.reshape(predicted_pose, (16, 3))
+        p3d_for_loss = p3d[4, 5, 7, 8, 9, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21]  # 13까지가 Upper Body
+        pose_prediction_cosine_similarity_loss = pose_prediction_cosine_similarity_loss_func(predicted_pose, p3d_for_loss)
+        pose_prediction_l1_loss = pose_prediction_l1_loss_func(predicted_pose, p3d_for_loss)
+        pose_prediction_loss = -0.01*pose_prediction_cosine_similarity_loss + 0.5*pose_prediction_l1_loss
+        heatmap_reconstruction_loss = heatmap_reconstruction_loss_func(reconstructed_heatmap, heatmap)
+        # Backpropagating Loss with Weighting Factors
+        backbone_loss = heatmap_prediction_loss
+        lifting_loss = 0.1*pose_prediction_loss + 0.001*heatmap_reconstruction_loss
+        loss = backbone_loss + lifting_loss
 
-        # Evaluate results using different evaluation metrices
-        y_output = p3d_hat.data.cpu().numpy()
-        y_target = p3d.data.cpu().numpy()
+        # Backward & Update
 
-        eval_body.eval(y_output, y_target, action)
-        eval_upper.eval(y_output, y_target, action)
-        eval_lower.eval(y_output, y_target, action)
 
-        # TODO: remove break
-        break
+    # -----------------------------------------------------------
+    # -----------------------------------------------------------
+    # -------------------- Validation Phase ---------------------
+    # -----------------------------------------------------------
+    # -----------------------------------------------------------
+    LOGGER.info('Validation...')
+
+    # ------------------- Evaluate -------------------
+
+    # TODO: replace p3d_hat with model preditions
+    p3d_hat = torch.ones_like(p3d)
+
+    # Evaluate results using different evaluation metrices
+    y_output = p3d_hat.data.cpu().numpy()
+    y_target = p3d.data.cpu().numpy()
+
+    eval_body.eval(y_output, y_target, action)
+    eval_upper.eval(y_output, y_target, action)
+    eval_lower.eval(y_output, y_target, action)
+
+
+    # -----------------------------------------------------------
+    # -----------------------------------------------------------
+    # ----------------------- Save Phase ------------------------
+    # -----------------------------------------------------------
+    # -----------------------------------------------------------
+    LOGGER.info('Save...')
 
     # ------------------- Save results -------------------
 
