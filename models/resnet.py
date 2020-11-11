@@ -187,6 +187,8 @@ class ResNet(nn.Module):
         # self.fc = nn.Linear(512 * block.expansion, num_classes)
         self.deconv1 = nn.ConvTranspose2d(2048, 256, kernel_size=3, stride=2, bias=False)
         self.deconv2 = nn.ConvTranspose2d(256, 15, kernel_size=3, stride=2, bias=False)
+        self.sig = nn.Sigmoid()
+        ####################
 
         for m in self.modules():
             if isinstance(m, nn.Conv2d):
@@ -230,7 +232,7 @@ class ResNet(nn.Module):
 
         return nn.Sequential(*layers)
 
-    def _forward_impl(self, x: Tensor) -> Tensor:
+    def _forward_impl(self, x: Tensor) -> Tensor:  # (3, 384, 384)
         # See note [TorchScript super()]
         x = self.conv1(x)
         x = self.bn1(x)
@@ -240,16 +242,19 @@ class ResNet(nn.Module):
         x = self.layer1(x)
         x = self.layer2(x)
         x = self.layer3(x)
-        x = self.layer4(x)
+        x = self.layer4(x)  # (2048, 12, 12)
+        # print(x.shape) - ResNet 별로 Shape가 다르기 때문에 여기서 Validate하고 뒤쪽에 Size 정해줌
         # output <= input size에서 가로/세로 32x 축소된 크기
 
         #################### Classification 용도로 만들어진 이 부분 2D Pose Heatmap Estimation 할 수 있도록 수정 필요함
         # x = self.avgpool(x)
         # x = torch.flatten(x, 1)
         # x = self.fc(x)
-        x = self.deconv1(x)
+        x = self.deconv1(x)  # (256, 24, 24)
         x = self.relu(x)
-        x = self.deconv2(x)
+        x = self.deconv2(x)  # (15, 48, 48)
+        x = self.sig(x)
+        ####################
 
 
         return x

@@ -15,6 +15,18 @@ from dataset import Mocap
 from utils import config, ConsoleLogger
 from utils import evaluate, io
 
+import torch.nn as nn
+
+from models import resnet18
+from models import resnet34
+from models import resnet50
+from models import resnet101
+from models import resnet152
+
+from models import HeatmapEncoder
+from models import PoseDecoder
+from models import HeatmapReconstructer
+
 LOGGER = ConsoleLogger("Main")
 
 
@@ -39,6 +51,30 @@ def main():
         data,
         batch_size=config.data_loader.batch_size,
         shuffle=config.data_loader.shuffle)
+    
+    # ------------------- Build Model -------------------
+
+    backbone = resnet101()
+    encoder = HeatmapEncoder()
+    decoder = PoseDecoder()
+    reconstructer = HeatmapReconstructer()
+
+    device = torch.device("cuda:0" if torch.cuda.is_available() else "cpu")
+    if torch.cuda.device_count() > 1:
+        print("Let's use", torch.cuda.device_count(), "GPUs!")
+        # dim = 0 [30, xxx] -> [10, ...], [10, ...], [10, ...] on 3 GPUs
+        backbone = nn.DataParallel(backbone)
+        encoder = nn.DataParallel(encoder)
+        decoder = nn.DataParallel(decoder)
+        reconstructer = nn.DataParallel(reconstructer)
+    backbone.to(device)
+    encoder.to(device)
+    decoder.to(device)
+    reconstructer.to(device)
+    
+    # ------------------- Build Loss & Optimizer -------------------
+
+    print("TO DO")
 
     # ------------------- Evaluation -------------------
 
@@ -65,6 +101,13 @@ def main():
         # -----------------------------------------------------------
         # ------------------- Run your model here -------------------
         # -----------------------------------------------------------
+
+        img.to(device)
+        backbone(img)
+        print("INFERENCe")
+        exit()
+
+        # ------------------- Evaluate -------------------
 
         # TODO: replace p3d_hat with model preditions
         p3d_hat = torch.ones_like(p3d)

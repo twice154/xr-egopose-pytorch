@@ -1,9 +1,9 @@
 import torch
 from torch import nn
 
-class Encoder3D(nn.Module):
+class HeatmapEncoder(nn.Module):
     def __init__(self, horizontal=48, vertical=48, channel=15, latent=20):
-        super(Encoder3D, self).__init__()
+        super(HeatmapEncoder, self).__init__()
 
         self.horizontal = horizontal
         self.vertical = vertical
@@ -15,9 +15,22 @@ class Encoder3D(nn.Module):
         self.conv2 = nn.Conv2d(64, 128, kernel_size=3, stride=2, padding=1)
         self.conv3 = nn.Conv2d(128, 256, kernel_size=3, stride=2, padding=1)
 
-        self.fc1 = nn.Linear((horizontal/8)*(vertical/8)*256, 2048)
+        self.fc1 = nn.Linear(6*6*256, 2048)
         self.fc2 = nn.Linear(2048, 512)
         self.fc3 = nn.Linear(512, self.latent)
 
     
-    def forward(self, x):
+    def forward(self, x):  # (15, 48, 48)
+        x = self.conv1(x)  # (64, 24, 24)
+        x = self.relu(x)
+        x = self.conv2(x)  # (128, 12, 12)
+        x = self.relu(x)
+        x = self.conv3(x)  # (256, 6, 6)
+        x = self.relu(x)
+
+        x = torch.flatten(x, 1)  # (256 x 6 x 6) = (9216)
+        x = self.fc1(x)  # (2048)
+        x = self.relu(x)
+        x = self.fc2(x)  # (512)
+        x = self.relu(x)
+        x = self.fc3(x)  # (20)

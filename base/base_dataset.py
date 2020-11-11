@@ -25,7 +25,7 @@ import numpy as np
 # import torch.utils.data
 # import utils.img
 
-class GenerateHeatmap():
+class GenerateHeatmap():  # Generate Probability Field -> 0~1
     def __init__(self, output_res, num_parts):
         self.output_res = output_res
         self.num_parts = num_parts
