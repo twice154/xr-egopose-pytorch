@@ -185,7 +185,12 @@ class ResNet(nn.Module):
         #################### Classification 용도로 만들어진 이 부분 2D Pose Heatmap Estimation 할 수 있도록 수정 필요함
         # self.avgpool = nn.AdaptiveAvgPool2d((1, 1))
         # self.fc = nn.Linear(512 * block.expansion, num_classes)
+        #################### for ResNet101
         self.deconv1 = nn.ConvTranspose2d(2048, 256, kernel_size=4, stride=2, bias=False, padding=1)
+        ####################
+        #################### for ResNet18
+        # self.deconv1 = nn.ConvTranspose2d(512, 256, kernel_size=4, stride=2, bias=False, padding=1)
+        ####################
         self.deconv2 = nn.ConvTranspose2d(256, 15, kernel_size=4, stride=2, bias=False, padding=1)
         self.sig = nn.Sigmoid()
         ####################

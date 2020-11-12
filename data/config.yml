@@ -2,23 +2,37 @@
 # config file
 
 dataset:
-  train: /SSD/xR-EgoPose/data/Dataset/TrainSet
+  train: /SSD/xR-EgoPose/data/Dataset/MiniTrainSet
   val: /SSD/xR-EgoPose/data/Dataset/ValSet
-  test: /SSD/xR-EgoPose/data/Dataset/TestSet
+  test: /SSD/xR-EgoPose/data/Dataset/MiniTestSet
 
 transforms:
   norm: Neck
 
 train_setting:
-  epoch: 3
+  epoch: 1  # 3
+  backbone_type: resnet101
+
+  backbone_path: False
+  encoder_path: False
+  decoder_path: False
+  reconstructer_path: False
 
 train_data_loader:
   batch_size: 16
   shuffle: True
-
 val_data_loader:
+  batch_size: 16
+  shuffle: False
+test_data_loader:
   batch_size: 16
   shuffle: False
 
 eval:
-  output_file: data/eval_res.json
+  experiment_folder: exp/experiment_1
+  evaluation_result_file: eval_res.json
+  # experiment_configuration_file: exp_config.yml
+  backbone_weight_file: backbone.pth
+  encoder_weight_file: encoder.pth
+  decoder_weight_file: decoder.pth
+  reconstructer_weight_file: reconstructer.pth

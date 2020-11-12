@@ -42,7 +42,7 @@ def compute_error(pred, gt):
 class EvalBody(BaseEval):
     """Eval entire body"""
 
-    _SEL = [4, 5, 7, 8, 9, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21]
+    _SEL = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15]  # [4, 5, 7, 8, 9, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21]
 
     def eval(self, pred, gt, actions=None):
         """Evaluate
@@ -77,7 +77,7 @@ class EvalBody(BaseEval):
 class EvalUpperBody(BaseEval):
     """Eval upper body"""
 
-    _SEL = [4, 5, 7, 8, 9, 11, 12, 13]  # [4, 5, 6, 7, 8, 9, 10, 11]
+    _SEL = [0, 1, 2, 3, 4, 5, 6, 7]  # [4, 5, 7, 8, 9, 11, 12, 13]  # [4, 5, 6, 7, 8, 9, 10, 11]
 
     def eval(self, pred, gt, actions=None):
         """Evaluate
@@ -112,7 +112,7 @@ class EvalUpperBody(BaseEval):
 class EvalLowerBody(BaseEval):
     """Eval lower body"""
 
-    _SEL = [14, 15, 16, 17, 18, 19, 20, 21]  # [0, 1, 2, 3, 12, 13, 14, 15]
+    _SEL = [8, 9, 10, 11, 12, 13, 14, 15]  # [14, 15, 16, 17, 18, 19, 20, 21]  # [0, 1, 2, 3, 12, 13, 14, 15]
 
     def eval(self, pred, gt, actions=None):
         """Evaluate
