@@ -186,9 +186,9 @@ def main():
             # LOGGER.info('Iteration: {}'.format(it))
             # LOGGER.info('Images: {}'.format(img.shape))  # (Batch, Channel, Height(y), Width(x))
             # LOGGER.info('p2dShapes: {}'.format(p2d.shape))  # (Width, Height)
-            # # LOGGER.info('p2ds: {}'.format(p2d))
+            # LOGGER.info('p2ds: {}'.format(p2d))
             # LOGGER.info('p3dShapes: {}'.format(p3d.shape))  # (^x, ^y, ^z)
-            # # LOGGER.info('p3ds: {}'.format(p3d))
+            # LOGGER.info('p3ds: {}'.format(p3d))
             # LOGGER.info('Actions: {}'.format(action))
             # LOGGER.info('heatmapShapes: {}'.format(heatmap.shape))
 
@@ -258,7 +258,7 @@ def main():
             # ------------------- Evaluation -------------------
             eval_body = evaluate.EvalBody()
             eval_upper = evaluate.EvalUpperBody()
-            eval_lower = evaluate.EvalUpperBody()
+            eval_lower = evaluate.EvalLowerBody()
 
             # ------------------- Read dataset frames -------------------
             backbone.eval()

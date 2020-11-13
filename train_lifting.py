@@ -243,7 +243,7 @@ def main():
         # ------------------- Evaluation -------------------
         eval_body = evaluate.EvalBody()
         eval_upper = evaluate.EvalUpperBody()
-        eval_lower = evaluate.EvalUpperBody()
+        eval_lower = evaluate.EvalLowerBody()
 
         # ------------------- Read dataset frames -------------------
         # backbone.eval()
