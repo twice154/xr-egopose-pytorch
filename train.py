@@ -122,22 +122,34 @@ def main():
     # Load or Init Model Weights
     if config.train_setting.backbone_path:
         backbone.load_state_dict(torch.load(config.train_setting.backbone_path))
+        # backbone = torch.load(config.train_setting.backbone_path)
+        LOGGER.info('Backbone Weight Loaded!')
     else:
         backbone.apply(init_weights)
+        LOGGER.info('Backbone Weight Initialized!')
     if config.train_setting.encoder_path:
-        encoder.load_state_dict(torch.load(config.train_setting.encoder_path))
+        encoder.module.load_state_dict(torch.load(config.train_setting.encoder_path))
+        # encoder = torch.load(config.train_setting.encoder_path)
+        LOGGER.info('Encoder Weight Loaded!')
     else:
         encoder.apply(init_weights)
+        LOGGER.info('Encoder Weight Initialized!')
     if config.train_setting.decoder_path:
-        decoder.load_state_dict(torch.load(config.train_setting.decoder_path))
+        decoder.module.load_state_dict(torch.load(config.train_setting.decoder_path))
+        # decoder = torch.load(config.train_setting.decoder_path)
+        LOGGER.info('Decoder Weight Loaded!')
     else:
         decoder.apply(init_weights)
+        LOGGER.info('Decoder Weight Initialized!')
     if config.train_setting.reconstructer_path:
-        reconstructer.load_state_dict(torch.load(config.train_setting.reconstructer_path))
+        reconstructer.module.load_state_dict(torch.load(config.train_setting.reconstructer_path))
+        # reconstructer = torch.load(config.train_setting.reconstructer_path)
+        LOGGER.info('Reconstructer Weight Loaded!')
     else:
         reconstructer.apply(init_weights)
+        LOGGER.info('Reconstructer Weight Initialized!')
 
-    device = torch.device("cuda:0" if torch.cuda.is_available() else "cpu")
+    device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
     if torch.cuda.device_count() > 1:
         LOGGER.info(str("Let's use " + str(torch.cuda.device_count()) + " GPUs!"))
         # dim = 0 [30, xxx] -> [10, ...], [10, ...], [10, ...] on 3 GPUs
@@ -177,7 +189,11 @@ def main():
 
         # Averagemeter for Epoch
         lossAverageMeter = AverageMeter()
-        errorAverageMeter = AverageMeter()
+        fullBodyErrorAverageMeter = AverageMeter()
+        upperBodyErrorAverageMeter = AverageMeter()
+        lowerBodyErrorAverageMeter = AverageMeter()
+        heatmapPredictionErrorAverageMeter = AverageMeter()
+        heatmapReconstructionErrorAverageMeter = AverageMeter()
         for it, (img, p2d, p3d, action, heatmap) in tqdm(enumerate(train_data_loader), total=len(train_data_loader)):
             #################### p2d는 각 Joint별 (x,y) 좌표를 나타낸듯. Image의 좌측상단이 (0,0)이다.
             #################### p3d는 Neck의 좌표를 (0,0,0)으로 생각했을 때의 각 Joint별 (^x,^y,^z) 좌표를 나타낸듯.
@@ -286,11 +302,13 @@ def main():
                 # Move Tensors to GPUs
                 img = img.cuda()
                 p3d = p3d.cuda()
+                heatmap = heatmap.cuda()
 
                 # Forward
                 predicted_heatmap = backbone(img)
                 latent = encoder(predicted_heatmap)
                 predicted_pose = decoder(latent)
+                reconstructed_heatmap = reconstructer(latent)
 
                 # Evaluate results using different evaluation metrices
                 predicted_pose = torch.reshape(predicted_pose, (-1, 16, 3))
@@ -303,9 +321,20 @@ def main():
                 eval_upper.eval(y_output, y_target, action)
                 eval_lower.eval(y_output, y_target, action)
 
+                heatmap_prediction_loss = heatmap_prediction_loss_func(predicted_heatmap, heatmap)
+                heatmap_reconstruction_loss = heatmap_reconstruction_loss_func(reconstructed_heatmap, heatmap)
+
                 # AverageMeter Update
-                errorAverageMeter.update(eval_body.get_results()["All"])
-            LOGGER.info(str("Validation Loss in Epoch " + str(ep) + " : " + str(errorAverageMeter.avg)))
+                fullBodyErrorAverageMeter.update(eval_body.get_results()["All"])
+                upperBodyErrorAverageMeter.update(eval_body.get_results()["All"])
+                lowerBodyErrorAverageMeter.update(eval_body.get_results()["All"])
+                heatmapPredictionErrorAverageMeter.update(heatmap_prediction_loss.data.cpu().numpy())
+                heatmapReconstructionErrorAverageMeter.update(heatmap_reconstruction_loss.data.cpu().numpy())
+            LOGGER.info(str("Validation fullBodyErrorAverageMeter in Epoch " + str(ep) + " : " + str(fullBodyErrorAverageMeter.avg)))
+            LOGGER.info(str("Validation upperBodyErrorAverageMeter in Epoch " + str(ep) + " : " + str(upperBodyErrorAverageMeter.avg)))
+            LOGGER.info(str("Validation lowerBodyErrorAverageMeter in Epoch " + str(ep) + " : " + str(lowerBodyErrorAverageMeter.avg)))
+            LOGGER.info(str("Validation heatmapPredictionErrorAverageMeter in Epoch " + str(ep) + " : " + str(heatmapPredictionErrorAverageMeter.avg)))
+            LOGGER.info(str("Validation heatmapReconstructionErrorAverageMeter in Epoch " + str(ep) + " : " + str(heatmapReconstructionErrorAverageMeter.avg)))
 
 
             # -----------------------------------------------------------
@@ -332,19 +361,21 @@ def main():
             LOGGER.info('Saving evaluation results...')
 
             # Evaluation Result Saving
-            res = {'FullBody': eval_body.get_results(),
-                'UpperBody': eval_upper.get_results(),
-                'LowerBody': eval_lower.get_results()}
+            res = {'FullBody': fullBodyErrorAverageMeter.avg,
+                'UpperBody': upperBodyErrorAverageMeter.avg,
+                'LowerBody': lowerBodyErrorAverageMeter.avg,
+                'HeatmapPrediction': heatmapPredictionErrorAverageMeter.avg,
+                'HeatmapReconstruction': heatmapReconstructionErrorAverageMeter.avg}
             io.write_json(os.path.join(os.getcwd(), config.eval.experiment_folder, str("epoch_" + str(ep)), config.eval.evaluation_result_file), res)
 
             # Experiement Configuration Saving
             copyfile("data/config.yml", os.path.join(os.getcwd(), config.eval.experiment_folder, str("epoch_" + str(ep)), "train_config.yml"))
 
             # Model Weights Saving
-            torch.save(backbone, os.path.join(os.getcwd(), config.eval.experiment_folder, str("epoch_" + str(ep)), config.eval.backbone_weight_file))
-            torch.save(encoder, os.path.join(os.getcwd(), config.eval.experiment_folder, str("epoch_" + str(ep)), config.eval.encoder_weight_file))
-            torch.save(decoder, os.path.join(os.getcwd(), config.eval.experiment_folder, str("epoch_" + str(ep)), config.eval.decoder_weight_file))
-            torch.save(reconstructer, os.path.join(os.getcwd(), config.eval.experiment_folder, str("epoch_" + str(ep)), config.eval.reconstructer_weight_file))
+            torch.save(backbone.state_dict(), os.path.join(os.getcwd(), config.eval.experiment_folder, str("epoch_" + str(ep)), config.eval.backbone_weight_file))
+            torch.save(encoder.state_dict(), os.path.join(os.getcwd(), config.eval.experiment_folder, str("epoch_" + str(ep)), config.eval.encoder_weight_file))
+            torch.save(decoder.state_dict(), os.path.join(os.getcwd(), config.eval.experiment_folder, str("epoch_" + str(ep)), config.eval.decoder_weight_file))
+            torch.save(reconstructer.state_dict(), os.path.join(os.getcwd(), config.eval.experiment_folder, str("epoch_" + str(ep)), config.eval.reconstructer_weight_file))
 
             # Variable for Final Model Selection
             # errorMinIsUpdatedInThisEpoch = False

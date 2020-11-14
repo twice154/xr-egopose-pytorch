@@ -13,10 +13,10 @@ train_setting:
   epoch: 1  # 3
   backbone_type: resnet101
 
-  backbone_path: exp/backbone_1/epoch_0/backbone.pth
-  encoder_path: exp/lifting_1/epoch_0/encoder.pth
-  decoder_path: exp/lifting_1/epoch_0/decoder.pth
-  reconstructer_path: exp/lifting_1/epoch_0/reconstructer.pth
+  backbone_path: False
+  encoder_path: False
+  decoder_path: False
+  reconstructer_path: False
 
 train_data_loader:
   batch_size: 16
@@ -29,7 +29,7 @@ test_data_loader:
   shuffle: False
 
 eval:
-  experiment_folder: exp/experiment_2
+  experiment_folder: exp/lifting_2
   evaluation_result_file: eval_res.json
   # experiment_configuration_file: exp_config.yml
   backbone_weight_file: backbone.pth
