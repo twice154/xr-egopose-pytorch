@@ -236,7 +236,8 @@ def main():
             # Backpropagating Loss with Weighting Factors
             backbone_loss = heatmap_prediction_loss
             lifting_loss = 0.1*pose_prediction_loss + 0.001*heatmap_reconstruction_loss
-            loss = backbone_loss + lifting_loss
+            # loss = backbone_loss + lifting_loss
+            loss = lifting_loss
 
             # Backward & Update
             loss.backward()
