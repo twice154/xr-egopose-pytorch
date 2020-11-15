@@ -119,9 +119,22 @@ def main():
     # decoder = PoseDecoder()
     # reconstructer = HeatmapReconstructer()
 
+    device = torch.device("cuda:0" if torch.cuda.is_available() else "cpu")
+    if torch.cuda.device_count() > 1:
+        LOGGER.info(str("Let's use " + str(torch.cuda.device_count()) + " GPUs!"))
+        # dim = 0 [30, xxx] -> [10, ...], [10, ...], [10, ...] on 3 GPUs
+        backbone = nn.DataParallel(backbone)
+        # encoder = nn.DataParallel(encoder)
+        # decoder = nn.DataParallel(decoder)
+        # reconstructer = nn.DataParallel(reconstructer)
+    backbone = backbone.cuda()
+    # encoder = encoder.cuda()
+    # decoder = decoder.cuda()
+    # reconstructer = reconstructer.cuda()
+
     # Load or Init Model Weights
     if config_backbone.train_setting.backbone_path:
-        backbone.module.load_state_dict(torch.load(config_backbone.train_setting.backbone_path))
+        backbone.load_state_dict(torch.load(config_backbone.train_setting.backbone_path))
         # backbone = torch.load(config_backbone.train_setting.backbone_path)
         LOGGER.info('Backbone Weight Loaded!')
     else:
@@ -139,19 +152,6 @@ def main():
     #     reconstructer.load_state_dict(torch.load(config_backbone.train_setting.reconstructer_path))
     # else:
     #     reconstructer.apply(init_weights)
-
-    device = torch.device("cuda:0" if torch.cuda.is_available() else "cpu")
-    if torch.cuda.device_count() > 1:
-        LOGGER.info(str("Let's use " + str(torch.cuda.device_count()) + " GPUs!"))
-        # dim = 0 [30, xxx] -> [10, ...], [10, ...], [10, ...] on 3 GPUs
-        backbone = nn.DataParallel(backbone)
-        # encoder = nn.DataParallel(encoder)
-        # decoder = nn.DataParallel(decoder)
-        # reconstructer = nn.DataParallel(reconstructer)
-    backbone = backbone.cuda()
-    # encoder = encoder.cuda()
-    # decoder = decoder.cuda()
-    # reconstructer = reconstructer.cuda()
     
     # ------------------- Build Loss & Optimizer -------------------
     # Build Loss

@@ -119,36 +119,6 @@ def main():
     decoder = PoseDecoder()
     reconstructer = HeatmapReconstructer()
 
-    # Load or Init Model Weights
-    if config.train_setting.backbone_path:
-        backbone.load_state_dict(torch.load(config.train_setting.backbone_path))
-        # backbone = torch.load(config.train_setting.backbone_path)
-        LOGGER.info('Backbone Weight Loaded!')
-    else:
-        backbone.apply(init_weights)
-        LOGGER.info('Backbone Weight Initialized!')
-    if config.train_setting.encoder_path:
-        encoder.module.load_state_dict(torch.load(config.train_setting.encoder_path))
-        # encoder = torch.load(config.train_setting.encoder_path)
-        LOGGER.info('Encoder Weight Loaded!')
-    else:
-        encoder.apply(init_weights)
-        LOGGER.info('Encoder Weight Initialized!')
-    if config.train_setting.decoder_path:
-        decoder.module.load_state_dict(torch.load(config.train_setting.decoder_path))
-        # decoder = torch.load(config.train_setting.decoder_path)
-        LOGGER.info('Decoder Weight Loaded!')
-    else:
-        decoder.apply(init_weights)
-        LOGGER.info('Decoder Weight Initialized!')
-    if config.train_setting.reconstructer_path:
-        reconstructer.module.load_state_dict(torch.load(config.train_setting.reconstructer_path))
-        # reconstructer = torch.load(config.train_setting.reconstructer_path)
-        LOGGER.info('Reconstructer Weight Loaded!')
-    else:
-        reconstructer.apply(init_weights)
-        LOGGER.info('Reconstructer Weight Initialized!')
-
     device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
     if torch.cuda.device_count() > 1:
         LOGGER.info(str("Let's use " + str(torch.cuda.device_count()) + " GPUs!"))
@@ -161,6 +131,36 @@ def main():
     encoder = encoder.cuda()
     decoder = decoder.cuda()
     reconstructer = reconstructer.cuda()
+
+    # Load or Init Model Weights
+    if config.train_setting.backbone_path:
+        backbone.load_state_dict(torch.load(config.train_setting.backbone_path))
+        # backbone = torch.load(config.train_setting.backbone_path)
+        LOGGER.info('Backbone Weight Loaded!')
+    else:
+        backbone.apply(init_weights)
+        LOGGER.info('Backbone Weight Initialized!')
+    if config.train_setting.encoder_path:
+        encoder.load_state_dict(torch.load(config.train_setting.encoder_path))
+        # encoder = torch.load(config.train_setting.encoder_path)
+        LOGGER.info('Encoder Weight Loaded!')
+    else:
+        encoder.apply(init_weights)
+        LOGGER.info('Encoder Weight Initialized!')
+    if config.train_setting.decoder_path:
+        decoder.load_state_dict(torch.load(config.train_setting.decoder_path))
+        # decoder = torch.load(config.train_setting.decoder_path)
+        LOGGER.info('Decoder Weight Loaded!')
+    else:
+        decoder.apply(init_weights)
+        LOGGER.info('Decoder Weight Initialized!')
+    if config.train_setting.reconstructer_path:
+        reconstructer.load_state_dict(torch.load(config.train_setting.reconstructer_path))
+        # reconstructer = torch.load(config.train_setting.reconstructer_path)
+        LOGGER.info('Reconstructer Weight Loaded!')
+    else:
+        reconstructer.apply(init_weights)
+        LOGGER.info('Reconstructer Weight Initialized!')
     
     # ------------------- Build Loss & Optimizer -------------------
     # Build Loss
