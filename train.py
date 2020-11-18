@@ -327,8 +327,8 @@ def main():
 
                 # AverageMeter Update
                 fullBodyErrorAverageMeter.update(eval_body.get_results()["All"])
-                upperBodyErrorAverageMeter.update(eval_body.get_results()["All"])
-                lowerBodyErrorAverageMeter.update(eval_body.get_results()["All"])
+                upperBodyErrorAverageMeter.update(eval_upper.get_results()["All"])
+                lowerBodyErrorAverageMeter.update(eval_lower.get_results()["All"])
                 heatmapPredictionErrorAverageMeter.update(heatmap_prediction_loss.data.cpu().numpy())
                 heatmapReconstructionErrorAverageMeter.update(heatmap_reconstruction_loss.data.cpu().numpy())
             LOGGER.info(str("Validation fullBodyErrorAverageMeter in Epoch " + str(ep) + " : " + str(fullBodyErrorAverageMeter.avg)))

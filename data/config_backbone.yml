@@ -29,7 +29,7 @@ test_data_loader:
   shuffle: False
 
 eval:
-  experiment_folder: exp/backbone_2
+  experiment_folder: exp/backbone_3
   evaluation_result_file: eval_res.json
   # experiment_configuration_file: exp_config.yml
   backbone_weight_file: backbone.pth

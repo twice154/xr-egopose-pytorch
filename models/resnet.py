@@ -187,9 +187,11 @@ class ResNet(nn.Module):
         # self.fc = nn.Linear(512 * block.expansion, num_classes)
         #################### for ResNet101
         self.deconv1 = nn.ConvTranspose2d(2048, 256, kernel_size=4, stride=2, bias=False, padding=1)
+        self.deconvbn1 = nn.BatchNorm2d(256)
         ####################
         #################### for ResNet18
         # self.deconv1 = nn.ConvTranspose2d(512, 256, kernel_size=4, stride=2, bias=False, padding=1)
+        # self.deconvbn1 = nn.BatchNorm2d(256)
         ####################
         self.deconv2 = nn.ConvTranspose2d(256, 15, kernel_size=4, stride=2, bias=False, padding=1)
         self.sig = nn.Sigmoid()
@@ -256,6 +258,7 @@ class ResNet(nn.Module):
         # x = torch.flatten(x, 1)
         # x = self.fc(x)
         x = self.deconv1(x)  # (256, 24, 24)
+        x = self.deconvbn1(x)
         x = self.relu(x)
         x = self.deconv2(x)  # (15, 48, 48)
         x = self.sig(x)
