@@ -97,7 +97,8 @@ def main():
     train_data_loader = DataLoader(
         train_data,
         batch_size=config_lifting.train_data_loader.batch_size,
-        shuffle=config_lifting.train_data_loader.shuffle)
+        shuffle=config_lifting.train_data_loader.shuffle,
+        num_workers=config_lifting.train_data_loader.workers)
     
     # ------------------- Build Model -------------------
     # backbone = resnet101()
@@ -251,7 +252,8 @@ def main():
             test_data_loader = DataLoader(
                 test_data,
                 batch_size=config_lifting.test_data_loader.batch_size,
-                shuffle=config_lifting.test_data_loader.shuffle)
+                shuffle=config_lifting.test_data_loader.shuffle,
+                num_workers=config_lifting.test_data_loader.workers)
 
             # ------------------- Evaluation -------------------
             eval_body = evaluate.EvalBody()

@@ -21,12 +21,15 @@ train_setting:
 train_data_loader:
   batch_size: 16
   shuffle: True
+  workers: 16
 val_data_loader:
   batch_size: 16
   shuffle: False
+  workers: 16
 test_data_loader:
   batch_size: 16
   shuffle: False
+  workers: 16
 
 eval:
   experiment_folder: exp/backbone_3

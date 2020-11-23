@@ -21,15 +21,18 @@ train_setting:
 train_data_loader:
   batch_size: 16
   shuffle: True
+  workers: 16
 val_data_loader:
   batch_size: 16
   shuffle: False
+  workers: 16
 test_data_loader:
   batch_size: 16
   shuffle: False
+  workers: 16
 
 eval:
-  experiment_folder: exp/lifting_3
+  experiment_folder: exp/lifting_4
   evaluation_result_file: eval_res.json
   # experiment_configuration_file: exp_config.yml
   backbone_weight_file: backbone.pth
