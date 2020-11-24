@@ -10,7 +10,7 @@ transforms:
   norm: Neck
 
 train_setting:
-  epoch: 1  # 3
+  epoch: 3
   backbone_type: resnet101
 
   backbone_path: False
@@ -32,7 +32,7 @@ test_data_loader:
   workers: 16
 
 eval:
-  experiment_folder: exp/lifting_4
+  experiment_folder: exp/lifting_bn_0
   evaluation_result_file: eval_res.json
   # experiment_configuration_file: exp_config.yml
   backbone_weight_file: backbone.pth
