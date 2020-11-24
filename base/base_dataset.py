@@ -29,7 +29,7 @@ class GenerateHeatmap():  # Generate Probability Field -> 0~1
     def __init__(self, output_res, num_parts):
         self.output_res = output_res
         self.num_parts = num_parts
-        sigma = (self.output_res-400)/64
+        sigma = (self.output_res-400)/64*2
         self.sigma = sigma
         size = 6*sigma + 3
         x = np.arange(0, size, 1, float)

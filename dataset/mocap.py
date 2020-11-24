@@ -204,12 +204,12 @@ class Mocap(BaseDataset):
         keypoints[14] = p2d[21]  # Right Toe
         heatmap = self.generateHeatmap(keypoints)
         ####################
-        #################### 생성된 Heatmap Visualization을 위한 코드
+        ################### 생성된 Heatmap Visualization을 위한 코드
         # heatmap = np.sum(heatmap, axis=0)
         # from PIL import Image
         # img = Image.fromarray(np.uint8(heatmap*255.0), 'L')
-        # img.save("./test2DHeatmap.png")
-        ####################
+        # img.save("./test2DHeatmap2xLarge.png")
+        ###################
 
         return img, p2d, p3d, action, heatmap.astype(np.float32)
 
