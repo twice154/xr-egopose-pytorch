@@ -32,9 +32,10 @@ test_data_loader:
   workers: 16
 
 eval:
-  experiment_folder: exp/lifting_bn_2xLargeHeatmapUncertainty
+  experiment_folder: exp/lifting_2
+  training_result_file: train_res.json
   evaluation_result_file: eval_res.json
-  # experiment_configuration_file: exp_config.yml
+  experiment_configuration_file: train_lifting_config.yml
   backbone_weight_file: backbone.pth
   encoder_weight_file: encoder.pth
   decoder_weight_file: decoder.pth

@@ -150,26 +150,26 @@ class Mocap(BaseDataset):
         # ax = fig.add_subplot(111, projection='3d')
         # for idx, point in enumerate(p3d):
         #     if idx < 14:
-        #         ax.scatter(point[0], point[1], point[2], c='#FF0000')
+        #         ax.scatter(point[1], point[0], point[2], c='#FF0000')
         #     else:
-        #         ax.scatter(point[0], point[1], point[2], c='#0000FF')
+        #         ax.scatter(point[1], point[0], point[2], c='#0000FF')
         # # for connecting point by line
-        # ax.plot([p3d[5][0], p3d[4][0]], [p3d[5][1], p3d[4][1]], [p3d[5][2], p3d[4][2]], c='#FF0000')  # Head -> Neck
-        # ax.plot([p3d[4][0], p3d[7][0]], [p3d[4][1], p3d[7][1]], [p3d[4][2], p3d[7][2]], c='#FF0000')  # Neck -> Left Arm
-        # ax.plot([p3d[7][0], p3d[8][0]], [p3d[7][1], p3d[8][1]], [p3d[7][2], p3d[8][2]], c='#FF0000')  # Left Arm -> Left Elbow
-        # ax.plot([p3d[8][0], p3d[9][0]], [p3d[8][1], p3d[9][1]], [p3d[8][2], p3d[9][2]], c='#FF0000')  # Left Elbow -> Left Hand
-        # ax.plot([p3d[4][0], p3d[11][0]], [p3d[4][1], p3d[11][1]], [p3d[4][2], p3d[11][2]], c='#FF0000')  # Neck -> Right Arm
-        # ax.plot([p3d[11][0], p3d[12][0]], [p3d[11][1], p3d[12][1]], [p3d[11][2], p3d[12][2]], c='#FF0000')  # Right Arm -> Right Elbow
-        # ax.plot([p3d[12][0], p3d[13][0]], [p3d[12][1], p3d[13][1]], [p3d[12][2], p3d[13][2]], c='#FF0000')  # Right Elbow -> Right Hand
-        # ax.plot([p3d[4][0], p3d[0][0]], [p3d[4][1], p3d[0][1]], [p3d[4][2], p3d[0][2]], c='#FF0000')  # Neck -> Hip
-        # ax.plot([p3d[0][0], p3d[14][0]], [p3d[0][1], p3d[14][1]], [p3d[0][2], p3d[14][2]], c='#0000FF')  # Hip -> Left Leg
-        # ax.plot([p3d[14][0], p3d[15][0]], [p3d[14][1], p3d[15][1]], [p3d[14][2], p3d[15][2]], c='#0000FF')  # Left Leg -> Left Knee
-        # ax.plot([p3d[15][0], p3d[16][0]], [p3d[15][1], p3d[16][1]], [p3d[15][2], p3d[16][2]], c='#0000FF')  # Left Knee -> Left Foot
-        # ax.plot([p3d[16][0], p3d[17][0]], [p3d[16][1], p3d[17][1]], [p3d[16][2], p3d[17][2]], c='#0000FF')  # Left Foot -> Left Toe
-        # ax.plot([p3d[0][0], p3d[18][0]], [p3d[0][1], p3d[18][1]], [p3d[0][2], p3d[18][2]], c='#0000FF')  # Hip -> Right Leg
-        # ax.plot([p3d[18][0], p3d[19][0]], [p3d[18][1], p3d[19][1]], [p3d[18][2], p3d[19][2]], c='#0000FF')  # Right Leg -> Right Knee
-        # ax.plot([p3d[19][0], p3d[20][0]], [p3d[19][1], p3d[20][1]], [p3d[19][2], p3d[20][2]], c='#0000FF')  # Right Knee -> Right Foot
-        # ax.plot([p3d[20][0], p3d[21][0]], [p3d[20][1], p3d[21][1]], [p3d[20][2], p3d[21][2]], c='#0000FF')  # Right Foot -> Right Toe
+        # ax.plot([p3d[5][1], p3d[4][1]], [p3d[5][0], p3d[4][0]], [p3d[5][2], p3d[4][2]], c='#FF0000')  # Head -> Neck
+        # ax.plot([p3d[4][1], p3d[7][1]], [p3d[4][0], p3d[7][0]], [p3d[4][2], p3d[7][2]], c='#FF0000')  # Neck -> Left Arm
+        # ax.plot([p3d[7][1], p3d[8][1]], [p3d[7][0], p3d[8][0]], [p3d[7][2], p3d[8][2]], c='#FF0000')  # Left Arm -> Left Elbow
+        # ax.plot([p3d[8][1], p3d[9][1]], [p3d[8][0], p3d[9][0]], [p3d[8][2], p3d[9][2]], c='#FF0000')  # Left Elbow -> Left Hand
+        # ax.plot([p3d[4][1], p3d[11][1]], [p3d[4][0], p3d[11][0]], [p3d[4][2], p3d[11][2]], c='#FF0000')  # Neck -> Right Arm
+        # ax.plot([p3d[11][1], p3d[12][1]], [p3d[11][0], p3d[12][0]], [p3d[11][2], p3d[12][2]], c='#FF0000')  # Right Arm -> Right Elbow
+        # ax.plot([p3d[12][1], p3d[13][1]], [p3d[12][0], p3d[13][0]], [p3d[12][2], p3d[13][2]], c='#FF0000')  # Right Elbow -> Right Hand
+        # ax.plot([p3d[4][1], p3d[0][1]], [p3d[4][0], p3d[0][0]], [p3d[4][2], p3d[0][2]], c='#FF0000')  # Neck -> Hip
+        # ax.plot([p3d[0][1], p3d[14][1]], [p3d[0][0], p3d[14][0]], [p3d[0][2], p3d[14][2]], c='#0000FF')  # Hip -> Left Leg
+        # ax.plot([p3d[14][1], p3d[15][1]], [p3d[14][0], p3d[15][0]], [p3d[14][2], p3d[15][2]], c='#0000FF')  # Left Leg -> Left Knee
+        # ax.plot([p3d[15][1], p3d[16][1]], [p3d[15][0], p3d[16][0]], [p3d[15][2], p3d[16][2]], c='#0000FF')  # Left Knee -> Left Foot
+        # ax.plot([p3d[16][1], p3d[17][1]], [p3d[16][0], p3d[17][0]], [p3d[16][2], p3d[17][2]], c='#0000FF')  # Left Foot -> Left Toe
+        # ax.plot([p3d[0][1], p3d[18][1]], [p3d[0][0], p3d[18][0]], [p3d[0][2], p3d[18][2]], c='#0000FF')  # Hip -> Right Leg
+        # ax.plot([p3d[18][1], p3d[19][1]], [p3d[18][0], p3d[19][0]], [p3d[18][2], p3d[19][2]], c='#0000FF')  # Right Leg -> Right Knee
+        # ax.plot([p3d[19][1], p3d[20][1]], [p3d[19][0], p3d[20][0]], [p3d[19][2], p3d[20][2]], c='#0000FF')  # Right Knee -> Right Foot
+        # ax.plot([p3d[20][1], p3d[21][1]], [p3d[20][0], p3d[21][0]], [p3d[20][2], p3d[21][2]], c='#0000FF')  # Right Foot -> Right Toe
         # # set legend & save
         # ax.set_xlabel('X Label')
         # ax.set_ylabel('Y Label')
@@ -208,7 +208,7 @@ class Mocap(BaseDataset):
         # heatmap = np.sum(heatmap, axis=0)
         # from PIL import Image
         # img = Image.fromarray(np.uint8(heatmap*255.0), 'L')
-        # img.save("./test2DHeatmap2xLarge.png")
+        # img.save("./test2DHeatmap.png")
         ###################
 
         return img, p2d, p3d, action, heatmap.astype(np.float32)

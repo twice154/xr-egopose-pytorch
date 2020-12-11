@@ -56,18 +56,24 @@ class AverageMeter(object):
 
 
 def init_weights(m):
-    if type(m) == nn.Conv2d:
-        torch.nn.init.xavier_uniform_(m.weight)
+    if isinstance(m, nn.Conv2d):
+        nn.init.xavier_normal_(m.weight)
         if m.bias is None:
             pass
         else:
-            m.bias.data.fill_(0.01)
-    elif type(m) == nn.Linear:
-        torch.nn.init.xavier_uniform_(m.weight)
+            m.bias.data.fill_(0)  # m.bias.data.fill_(0.01)
+    elif isinstance(m, nn.ConvTranspose2d):
+        nn.init.xavier_normal_(m.weight)
         if m.bias is None:
             pass
         else:
-            m.bias.data.fill_(0.01)
+            m.bias.data.fill_(0)  # m.bias.data.fill_(0.01)
+    elif isinstance(m, nn.Linear):
+        nn.init.xavier_normal_(m.weight)
+        if m.bias is None:
+            pass
+        else:
+            m.bias.data.fill_(0)  # m.bias.data.fill_(0.01)
 
 
 def main():
@@ -156,7 +162,7 @@ def main():
     
     # ------------------- Build Loss & Optimizer -------------------
     # Build Loss
-    heatmap_prediction_loss_func = nn.MSELoss()
+    heatmap_prediction_loss_func = nn.MSELoss(reduction='mean')
     # pose_prediction_cosine_similarity_loss_func = nn.CosineSimilarity()
     # pose_prediction_l1_loss_func = nn.L1Loss()
     # heatmap_reconstruction_loss_func = nn.MSELoss()
@@ -168,6 +174,7 @@ def main():
         # {"params": decoder.parameters()},
         # {"params": reconstructer.parameters()}
     ], lr=0.001)
+    scheduler = optim.lr_scheduler.StepLR(optimizer, step_size=5, gamma=0.1)
 
     # Variable for Final Model Selection
     # errorMin = 100
@@ -239,7 +246,8 @@ def main():
         LOGGER.info(str("Training Loss in Epoch " + str(ep) + " : " + str(lossAverageMeter.avg)))
 
 
-        if ep+1 == config_backbone.train_setting.epoch:  # Test only in Final Epoch because of Training Time Issue
+        # if ep+1 == config_backbone.train_setting.epoch:  # Test only in Final Epoch because of Training Time Issue
+        if True:
             # -----------------------------------------------------------
             # -----------------------------------------------------------
             # -------------------- Validation Phase ---------------------
@@ -343,6 +351,12 @@ def main():
             LOGGER.info('Saving evaluation results...')
 
             # Evaluation Result Saving
+            res_train = {'HeatmapPrediction': lossAverageMeter.avg}
+            # res = {'FullBody': eval_body.get_results(),
+            #     'UpperBody': eval_upper.get_results(),
+            #     'LowerBody': eval_lower.get_results()}
+            io.write_json(os.path.join(os.getcwd(), config_backbone.eval.experiment_folder, str("epoch_" + str(ep)), config_backbone.eval.training_result_file), res_train)
+
             res = {'HeatmapPrediction': heatmapPredictionErrorAverageMeter.avg}
             # res = {'FullBody': eval_body.get_results(),
             #     'UpperBody': eval_upper.get_results(),
@@ -350,7 +364,7 @@ def main():
             io.write_json(os.path.join(os.getcwd(), config_backbone.eval.experiment_folder, str("epoch_" + str(ep)), config_backbone.eval.evaluation_result_file), res)
 
             # Experiement config_backboneuration Saving
-            copyfile("data/config_backbone.yml", os.path.join(os.getcwd(), config_backbone.eval.experiment_folder, str("epoch_" + str(ep)), "train_backbone_config_backbone.yml"))
+            copyfile("data/config_backbone.yml", os.path.join(os.getcwd(), config_backbone.eval.experiment_folder, str("epoch_" + str(ep)), config_backbone.eval.experiment_configuration_file))
 
             # Model Weights Saving
             torch.save(backbone.state_dict(), os.path.join(os.getcwd(), config_backbone.eval.experiment_folder, str("epoch_" + str(ep)), config_backbone.eval.backbone_weight_file))
@@ -361,6 +375,7 @@ def main():
             # Variable for Final Model Selection
             # errorMinIsUpdatedInThisEpoch = False
 
+        scheduler.step()
     LOGGER.info('Done.')
 
 

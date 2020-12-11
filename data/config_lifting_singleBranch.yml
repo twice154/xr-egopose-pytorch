@@ -1,0 +1,42 @@
+# Copyright (c) Facebook, Inc. and its affiliates. All Rights Reserved
+# config file
+
+dataset:
+  train: /SSD/xR-EgoPose/data/Dataset/TrainSet
+  val: /SSD/xR-EgoPose/data/Dataset/ValSet
+  test: /SSD/xR-EgoPose/data/Dataset/TestSet
+
+transforms:
+  norm: Neck
+
+train_setting:
+  epoch: 3
+  backbone_type: resnet101
+
+  backbone_path: False
+  encoder_path: False
+  decoder_path: False
+  reconstructer_path: False
+
+train_data_loader:
+  batch_size: 16
+  shuffle: True
+  workers: 16
+val_data_loader:
+  batch_size: 16
+  shuffle: False
+  workers: 16
+test_data_loader:
+  batch_size: 16
+  shuffle: False
+  workers: 16
+
+eval:
+  experiment_folder: exp/lifting_singleBranch_2
+  training_result_file: train_res.json
+  evaluation_result_file: eval_res.json
+  experiment_configuration_file: train_lifting_config.yml
+  backbone_weight_file: backbone.pth
+  encoder_weight_file: encoder.pth
+  decoder_weight_file: decoder.pth
+  reconstructer_weight_file: reconstructer.pth

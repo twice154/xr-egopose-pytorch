@@ -1,0 +1,17 @@
+# Copyright (c) Facebook, Inc. and its affiliates. All Rights Reserved
+# config file
+
+dataset:
+  train: /SSD/xR-EgoPose/data/Dataset/TrainSet
+  val: /SSD/xR-EgoPose/data/Dataset/ValSet
+  test: /SSD/xR-EgoPose/data/Dataset/TestSet
+
+transforms:
+  norm: Neck
+
+data_loader:
+  batch_size: 1
+  shuffle: True
+
+eval:
+  output_file: data/eval_res.json
