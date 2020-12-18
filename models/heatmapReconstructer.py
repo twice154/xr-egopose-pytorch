@@ -24,7 +24,7 @@ class HeatmapReconstructer(nn.Module):
         self.conv2 = nn.ConvTranspose2d(128, 64, kernel_size=4, stride=2, padding=1, bias=False)
         self.convbn2 = nn.BatchNorm2d(64)
         self.conv3 = nn.ConvTranspose2d(64, 15, kernel_size=4, stride=2, padding=1, bias=False)
-        self.sig = nn.Sigmoid()
+        # self.sig = nn.Sigmoid()
 
     
     def forward(self, x):  # (20)
@@ -51,6 +51,6 @@ class HeatmapReconstructer(nn.Module):
         x = self.lrelu(x)
         x = self.dropout(x)
         x = self.conv3(x)  # (15, 48, 48)
-        x = self.sig(x)
+        # x = self.sig(x)
 
         return x

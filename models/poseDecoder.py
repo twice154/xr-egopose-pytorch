@@ -17,7 +17,7 @@ class PoseDecoder(nn.Module):
         self.fc2 = nn.Linear(32, 32)
         self.fcbn2 = nn.BatchNorm1d(32)
         self.fc3 = nn.Linear(32, 48)
-        self.tan = nn.Tanh()
+        # self.tan = nn.Tanh()
 
     
     def forward(self, x):  # (20)
@@ -31,7 +31,7 @@ class PoseDecoder(nn.Module):
         x = self.dropout(x)
         x = self.fc3(x)  # (48)
         #################### Scaling이 -1~+1 사이로 되어있어서, Loss 계산시에 x2해서 해줘야함 (2x2x2 Cube 상에서 3DPose를 계산하기 떄문에)
-        x = self.tan(x)
-        x = x * 2
+        # x = self.tan(x)
+        # x = x * 2
 
         return x

@@ -29,7 +29,7 @@ class GenerateHeatmap():  # Generate Probability Field -> 0~1
     def __init__(self, output_res, num_parts):
         self.output_res = output_res
         self.num_parts = num_parts
-        sigma = (self.output_res-400)/64 * 2.5  # x2.5는 실험적으로 논문에서 리포트한 히트맵 크기랑 비슷하게 그리다보니 얻은 값임.
+        sigma = (self.output_res-400)/48  # * 2.5  # x2.5는 실험적으로 논문에서 리포트한 히트맵 크기랑 비슷하게 그리다보니 얻은 값임.
         self.sigma = sigma
         size = 6*sigma + 3
         x = np.arange(0, size, 1, float)
