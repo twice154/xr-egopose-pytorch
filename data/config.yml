@@ -19,9 +19,9 @@ train_setting:
   reconstructer_path: False
 
 train_data_loader:
-  batch_size: 16
+  batch_size: 1
   shuffle: True
-  workers: 16
+  workers: 1
 val_data_loader:
   batch_size: 16
   shuffle: False

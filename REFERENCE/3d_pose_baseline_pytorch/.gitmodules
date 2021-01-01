@@ -1,3 +1,0 @@
-[submodule "src/progress"]
-	path = src/progress
-	url = https://github.com/verigak/progress.git
