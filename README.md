@@ -33,11 +33,11 @@ After downloading, open **data/config.yml**, and write your own dataset path.
 <thead>
 <tr>
 <th align="center">Dataset</th>
-<th align="center">Naive Training</th>
+<th align="center">Naive Architecture & Training</th>
 <th align="center">Pre-training & Fine-tuning</th>
 <th align="center">Add BN in Lifting Module</th>
 <th align="center">Add Dropout</th>
-<th align="center">Change Root Joint from Neck to Hip</th>
+<th align="center">Change Root Joint</th>
 <th align="center">Improve Lifting Module</th>
 <th align="center">Add Data Augmentation</th>
 <th align="center">ICCV19</th>
