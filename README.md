@@ -27,7 +27,7 @@ Follow the instruction of [Official xR-EgoPose Dataset Repository](https://githu
 After downloading, open **data/config.yml**, and write your own dataset path.
 
 Here are some visualizations of joint distributions in 3D space (Just focus on triangle.).
-![img](LeftArm.png)
+![img](LeftArm.png)  
 You can check LeftArm.png, LeftElbow.png, LeftHand.png, RightFoot.png, RightKnee.png, RightLeg.png for more joint visualizations.
 
 # Results of implemented Model in terms of Full-body Average Evaluation Error (mm).
