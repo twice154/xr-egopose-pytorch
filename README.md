@@ -28,7 +28,7 @@ After downloading, open **data/config.yml**, and write your own dataset path.
 
 Here are diagram (Just focus on triangle.)
 
-# Results of implemented Model in terms of Evaluation Error (mm).
+# Results of implemented Model in terms of Full-body Average Evaluation Error (mm).
 
 Tricks I tried.
 * Pre-training & Fine-tuning
@@ -56,7 +56,7 @@ Tricks I tried.
 </thead>
 <tbody>
 <tr>
-<td align="center">xR-EgoPose (Full-body Average)</td>
+<td align="center">xR-EgoPose</td>
 <td align="center">280</td>
 <td align="center">230</td>
 <td align="center">110</td>
