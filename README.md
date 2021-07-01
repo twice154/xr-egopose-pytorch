@@ -4,7 +4,7 @@ This repository contains the unoffical pyTorch implementation of xR-EgoPose in t
 
 I tried to implement (the paper don't mention explicitly.)
 * Neural Network Architecture
-* * Training Details
+* Training Details
 * Data Augmentation Strategy
 
 ## License and Citation
