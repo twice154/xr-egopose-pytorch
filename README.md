@@ -70,9 +70,8 @@ Tricks I tried.
 
 # Training
 
-Open **data/config.yml**, and write your own settings.
-
-Then, run
+Open **data/config.yml**, and write your own settings.  
+Run
 ```
 python train.py
 ```
