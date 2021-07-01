@@ -26,15 +26,17 @@ The license agreement for the data usage implies citation of the paper. Please n
 Follow the instruction of [Official xR-EgoPose Dataset Repository](https://github.com/facebookresearch/xR-EgoPose) for downloading dataset.  
 After downloading, open **data/config.yml**, and write your own dataset path.
 
+Here are diagram (Just focus on triangle.)
+
 # Results of implemented Model in terms of Evaluation Error (mm).
 
 Tricks I tried.
 * Pre-training & Fine-tuning
-* Add BN in Lifting Module
+* Add BN in Lifting Module ([Reference](https://arxiv.org/abs/1705.03098))
 * Add Dropout
-* Change Root Join from Neck to Hip
+* Change Root Joint from Neck to Hip ([Reference1](https://arxiv.org/abs/2008.09047), [Reference2](https://arxiv.org/abs/2008.03713))
 * Improve Lifting Module Architecture
-* Data Augmentation
+* Data Augmentation ()
 
 
 </ul>
