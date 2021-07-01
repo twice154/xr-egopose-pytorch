@@ -52,8 +52,8 @@ After downloading, open **data/config.yml**, and write your own dataset path.
 <td align="center">110mm</td>
 <td align="center">110mm</td>
 <td align="center">100mm</td>
-<td align="center">100mm</td>
-<td align="center">58mm</td>
+<td align="center">**100mm**</td>
+<td align="center">**58mm**</td>
 </tr>
 </tbody></table>
 
