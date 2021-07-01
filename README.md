@@ -36,6 +36,7 @@ Tricks I tried.
 * Improve Lifting Module Architecture
 * Data Augmentation
 
+
 </ul>
 <table>
 <thead>
