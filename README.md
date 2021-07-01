@@ -24,11 +24,36 @@ The license agreement for the data usage implies citation of the paper. Please n
 # Data Preparation
 
 Follow the instruction of [Official xR-EgoPose Dataset Repository](https://github.com/facebookresearch/xR-EgoPose) to download.  
-After downloading, open **data/config.yml**, and write your dataset path.
+After downloading, open **data/config.yml**, and write your own dataset path.
 
 # Results of implemented xR-EgoPose
 
-hi
+</ul>
+<table>
+<thead>
+<tr>
+<th align="center">Dataset</th>
+<th align="center">Ours</th>
+<th align="center">CVPRW19</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td align="center">Set5</td>
+<td align="center">-- / --</td>
+<td align="center">30.13 / 0.853</td>
+</tr>
+<tr>
+<td align="center">Set14</td>
+<td align="center">-- / --</td>
+<td align="center">26.98 / 0.746</td>
+</tr>
+<tr>
+<td align="center">Urban100</td>
+<td align="center">-- / --</td>
+<td align="center">24.31 / 0.716</td>
+</tr>  
+</tbody></table>
 
 # Training
 
