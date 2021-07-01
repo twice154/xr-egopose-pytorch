@@ -36,7 +36,7 @@ Tricks I tried.
 * Add Dropout
 * Change Root Joint from Neck to Hip ([Reference1](https://arxiv.org/abs/2008.09047), [Reference2](https://arxiv.org/abs/2008.03713))
 * Improve Lifting Module Architecture
-* Data Augmentation ()
+* Data Augmentation
 
 
 </ul>
