@@ -2,10 +2,11 @@
 
 This repository contains the unoffical pyTorch implementation of xR-EgoPose in the paper ["*x*R-EgoPose: Egocentric 3D Human Pose from an HMD Camera"](http://openaccess.thecvf.com/content_ICCV_2019/papers/Tome_xR-EgoPose_Egocentric_3D_Human_Pose_From_an_HMD_Camera_ICCV_2019_paper.pdf) (ICCV 2019, oral). (**Failed to implement similar performance reported on the paper.**)
 
-I tried to implement (No details on the paper)
-* Exact Neural Network Architecture
+I tried to implement
+* Neural Network Architecture
 * Data Augmentation Strategy
 * Training Details
+the paper didn't mention explicitly.
 
 ## License and Citation
 
