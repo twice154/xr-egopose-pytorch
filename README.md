@@ -57,17 +57,21 @@ Tricks I tried.
 <tbody>
 <tr>
 <td align="center">xR-EgoPose (Full-body Average)</td>
-<td align="center">280 mm</td>
-<td align="center">230 mm</td>
-<td align="center">110 mm</td>
-<td align="center">110 mm</td>
-<td align="center">110 mm</td>
-<td align="center">100 mm</td>
-<td align="center">100 mm</td>
-<td align="center">58 mm</td>
+<td align="center">280</td>
+<td align="center">230</td>
+<td align="center">110</td>
+<td align="center">110</td>
+<td align="center">110</td>
+<td align="center">100</td>
+<td align="center">100</td>
+<td align="center">58</td>
 </tr>
 </tbody></table>
 
 # Training
 
-hi
+Open **data/config.yml**, and write your own settings.
+Then, run
+```
+python train.py
+```
