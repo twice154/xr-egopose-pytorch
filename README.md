@@ -71,6 +71,7 @@ Tricks I tried.
 # Training
 
 Open **data/config.yml**, and write your own settings.
+
 Then, run
 ```
 python train.py
