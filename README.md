@@ -26,7 +26,7 @@ The license agreement for the data usage implies citation of the paper. Please n
 Follow the instruction of [Official xR-EgoPose Dataset Repository](https://github.com/facebookresearch/xR-EgoPose) for downloading dataset.  
 After downloading, open **data/config.yml**, and write your own dataset path.
 
-Here are some visualizations of joint distributions in 3D space (Just watch triangle points.).
+Here are some visualizations of joint distributions in 3D space (Just watch trianglular points.).
 ![img](LeftArm.png)  
 You can check LeftArm.png, LeftElbow.png, LeftHand.png, RightFoot.png, RightKnee.png, RightLeg.png for more joint visualizations.
 
