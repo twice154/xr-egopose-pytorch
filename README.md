@@ -23,10 +23,18 @@ The license agreement for the data usage implies citation of the paper. Please n
 
 # Data Preparation
 
-Follow the instruction of [Official xR-EgoPose Dataset Repository](https://github.com/facebookresearch/xR-EgoPose) to download.  
+Follow the instruction of [Official xR-EgoPose Dataset Repository](https://github.com/facebookresearch/xR-EgoPose) for downloading dataset.  
 After downloading, open **data/config.yml**, and write your own dataset path.
 
 # Results of implemented Model in terms of Evaluation Error (mm).
+
+Tricks I tried.
+* Pre-training & Fine-tuning
+* Add BN in Lifting Module
+* Add Dropout
+* Change Root Join from Neck to Hip
+* Improve Lifting Module Architecture
+* Data Augmentation
 
 </ul>
 <table>
@@ -35,11 +43,11 @@ After downloading, open **data/config.yml**, and write your own dataset path.
 <th align="center">Dataset</th>
 <th align="center">Naive Architecture & Training</th>
 <th align="center">Pre-training & Fine-tuning</th>
-<th align="center">Add BN in Lifting Module</th>
-<th align="center">Add Dropout</th>
+<th align="center">BN in Lifting Module</th>
+<th align="center">Dropout</th>
 <th align="center">Change Root Joint</th>
 <th align="center">Improve Lifting Module</th>
-<th align="center">Add Data Augmentation</th>
+<th align="center">Data Augmentation</th>
 <th align="center">ICCV19</th>
 </tr>
 </thead>
@@ -52,8 +60,8 @@ After downloading, open **data/config.yml**, and write your own dataset path.
 <td align="center">110mm</td>
 <td align="center">110mm</td>
 <td align="center">100mm</td>
-<td align="center">**100mm**</td>
-<td align="center">**58mm**</td>
+<td align="center">100mm</td>
+<td align="center">58mm</td>
 </tr>
 </tbody></table>
 
