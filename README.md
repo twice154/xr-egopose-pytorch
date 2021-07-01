@@ -1,13 +1,13 @@
 # *x*R-EgoPose
 
-The *x*R-EgoPose Dataset has been introduced in the paper ["*x*R-EgoPose: Egocentric 3D Human Pose from an HMD Camera"](http://openaccess.thecvf.com/content_ICCV_2019/papers/Tome_xR-EgoPose_Egocentric_3D_Human_Pose_From_an_HMD_Camera_ICCV_2019_paper.pdf) (ICCV 2019, oral). It is a dataset of ~380 thousand photo-realistic *egocentric*  camera images in a variety of indoor and  outdoor spaces.
+This repository contains the unoffical pyTorch implementation of xR-EgoPose in the paper ["*x*R-EgoPose: Egocentric 3D Human Pose from an HMD Camera"](http://openaccess.thecvf.com/content_ICCV_2019/papers/Tome_xR-EgoPose_Egocentric_3D_Human_Pose_From_an_HMD_Camera_ICCV_2019_paper.pdf) (ICCV 2019, oral). (**Failed to implement similar performance reported on the paper.**)
 
-![img](doc/teaser.png)
+I tried to implement (No details on the paper)
+* Exact Neural Network Architecture
+* Data Augmentation Strategy
+* Training Details
 
-
-The code contained in this repository is a PyTorch implementation of the data loader with additional evaluation functions for comparison.
-
-## Citing *x*R-EgoPose
+## License and Citation
 
 ```
 @inproceedings{tome2019xr,
@@ -20,6 +20,15 @@ The code contained in this repository is a PyTorch implementation of the data lo
 ```
 
 The license agreement for the data usage implies citation of the paper. Please notice that citing the dataset URL instead of the publication would not be compliant with this license agreement.
+
+# *x*R-EgoPose
+
+The *x*R-EgoPose Dataset has been introduced in the paper ["*x*R-EgoPose: Egocentric 3D Human Pose from an HMD Camera"](http://openaccess.thecvf.com/content_ICCV_2019/papers/Tome_xR-EgoPose_Egocentric_3D_Human_Pose_From_an_HMD_Camera_ICCV_2019_paper.pdf) (ICCV 2019, oral). It is a dataset of ~380 thousand photo-realistic *egocentric*  camera images in a variety of indoor and  outdoor spaces.
+
+![img](doc/teaser.png)
+
+
+The code contained in this repository is a PyTorch implementation of the data loader with additional evaluation functions for comparison.
 
 ## Download on Mac OS and Linux
 
