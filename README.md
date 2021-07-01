@@ -26,7 +26,7 @@ The license agreement for the data usage implies citation of the paper. Please n
 Follow the instruction of [Official xR-EgoPose Dataset Repository](https://github.com/facebookresearch/xR-EgoPose) to download.  
 After downloading, open **data/config.yml**, and write your own dataset path.
 
-# Results of implemented xR-EgoPose
+# Results of implemented Model in terms of Evaluation Error (mm).
 
 </ul>
 <table>
@@ -46,6 +46,7 @@ After downloading, open **data/config.yml**, and write your own dataset path.
 <tbody>
 <tr>
 <td align="center">xR-EgoPose (Full-body Average)</td>
+<td align="center">-- / --</td>
 <td align="center">-- / --</td>
 <td align="center">-- / --</td>
 <td align="center">-- / --</td>
