@@ -46,14 +46,14 @@ After downloading, open **data/config.yml**, and write your own dataset path.
 <tbody>
 <tr>
 <td align="center">xR-EgoPose (Full-body Average)</td>
-<td align="center">-- / --</td>
-<td align="center">-- / --</td>
-<td align="center">-- / --</td>
-<td align="center">-- / --</td>
-<td align="center">-- / --</td>
-<td align="center">-- / --</td>
-<td align="center">-- / --</td>
-<td align="center">-- / --</td>
+<td align="center">280mm</td>
+<td align="center">230mm</td>
+<td align="center">110mm</td>
+<td align="center">110mm</td>
+<td align="center">110mm</td>
+<td align="center">100mm</td>
+<td align="center">100mm</td>
+<td align="center">58mm</td>
 </tr>
 </tbody></table>
 
