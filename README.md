@@ -23,7 +23,7 @@ The license agreement for the data usage implies citation of the paper. Please n
 
 # Data Preparation
 
-Follow the instruction of [Official xR-EgoPose Dataset Repository](https://github.com/facebookresearch/xR-EgoPose) to download.
+Follow the instruction of [Official xR-EgoPose Dataset Repository](https://github.com/facebookresearch/xR-EgoPose) to download.  
 After downloading, open **data/config.yml**, and write your dataset path.
 
 # Results of implemented xR-EgoPose
